@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../db/connection');
+const inputCheck = require('../../utils/inputCheck');
 
 // Get all roles
 router.get('/role', (req, res) => {
@@ -22,7 +23,7 @@ router.get('/role', (req, res) => {
 router.get('/role/:id', (req, res) => {
   const sql = `SELECT * FROM role WHERE id = ?`;
   const params = [parseInt(req.params.id)];
-  console.log(params);
+  
   db.query(sql, params, (err, row) => {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -44,7 +45,7 @@ router.delete('/role/:id', (req, res) => {
       res.status(400).json({ error: res.message });
     } else if (!result.affectedRows) {
       res.json({
-        message: 'Party not found'
+        message: 'Role not found'
       });
     } else {
       res.json({
@@ -64,9 +65,8 @@ router.post('/role', ({ body }, res) => {
     res.status(400).json({ error: errors });
     return;
   }
-
-  const sql = `INSERT INTO voters (title, salary, department_id) VALUES (?,?,?)`;
-  const params = [body.title, body.salary, body.department];
+  const sql = `INSERT INTO role (title, salary, department_id) VALUES (?,?,?)`;
+  const params = [body.title, body.salary, body.department_id];
   
   db.query(sql, params, (err, result) => {
     if (err) {
@@ -79,4 +79,6 @@ router.post('/role', ({ body }, res) => {
     });
   });
 });
+
+
 module.exports = router;
