@@ -33,65 +33,55 @@ const question= [
 const promptoptions = () => {
     console.log(`
     =================
-    Manage Employees
+   Employees Tracker.
     =================
     `);
     inquirer.prompt(question).then(options = options=>{
       switch(options.choices){
         case "View all departments":
           //showDepartments();
-          promptoptions();
-          break;
+           break;
         case "View all roles":
           //showRoles();
-          promptoptions();
           break;
         case "View all employees":
           //showEmployees();
-          promptoptions();
           break;
         case "Add a department":
           //addDepartment();
-          promptoptions();
           break;
         case "Add a role":
           //addRole();
-          promptoptions();
           break;
         case "Add an employee":
           //addEmployee();
-          promptoptions();
           break;
         case "Update an employee role":
           //updateEmployee();
-          promptoptions();
           break;
         case "Update an employee manager":
           //updateManager();
-          promptoptions();
           break;
         case "View employees by department":
           //employeeDepartment();
-          promptoptions();
           break;
         case "Delete a department":
           //deleteDepartment();
-          promptoptions();
           break;
         case "Delete a role":
           //deleteRole();
-          promptoptions();
           break;
         case "Delete an employee":
           //deleteEmployee();
-          promptoptions();
           break;
         case "View department budgets":
-          //viewBudget();
-          promptoptions();
+          //viewBudget();        
           break;
-        case "No Action":  
-         return;
+        case "No Action": 
+         db.end(); //close database
+         break;
+        default:
+          db.end(); //close database
         }
     });
  };
