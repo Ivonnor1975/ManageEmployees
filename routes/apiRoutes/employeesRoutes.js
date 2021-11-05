@@ -79,7 +79,7 @@ router.post('/employees', ({ body }, res) => {
   });
 });
 
-// Update a employees's manager
+// Update an employees's manager
 router.put('/employees/:id', (req, res) => {
   const errors = inputCheck(req.body, 'manager_id');
   if (errors) {
