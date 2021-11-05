@@ -1,8 +1,12 @@
 INSERT INTO department (name)
 VALUES
-  ('HR'),
+  ('Sales'),
+  ('Finance'),
+  ('Legal'),
+  ('Customer Service')
+  ('Marketing'),
   ('IT'),
-  ('Sales');
+  ('HR');
 
 INSERT INTO role (title, salary, department_id)
 VALUES
@@ -12,7 +16,7 @@ VALUES
 
 INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES
-  ('Ronald', 'Firbank', 1,0),
+  ('Ronald', 'Firbank', 1,2),
   ('Virginia', 'Woolf', 2,1),
-  ('Piers', 'Gaveston', 3,0),
-  ('Charles', 'LeRoi', 1,0);
+  ('Piers', 'Gaveston', 3,1),
+  ('Charles', 'LeRoi', 1, NULL);

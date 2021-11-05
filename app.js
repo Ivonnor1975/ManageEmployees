@@ -2,32 +2,12 @@
 const db = require('./db/connection');
 // import inquirer 
 const inquirer = require('inquirer');
+//import module with question
+const questions = require('./utils/questions.js')
 // import console.table
 const cTable = require('console.table'); 
 //console.table(rows);
 
-//define the array with questions
-const question= [
-  {
-    type: 'list',
-    name: 'choices', 
-    message: 'What would you like to do?',
-    choices: ['View all departments', 
-              'View all roles', 
-              'View all employees', 
-              'Add a department', 
-              'Add a role', 
-              'Add an employee', 
-              'Update an employee role',
-              'Update an employee manager',
-              "View employees by department",
-              'Delete a department',
-              'Delete a role',
-              'Delete an employee',
-              'View department budgets',
-              'No Action']
-  }
-]
 
 //inquirer prompt for first action
 const promptoptions = () => {
@@ -36,17 +16,17 @@ const promptoptions = () => {
    Employees Tracker.
     =================
     `);
-    inquirer.prompt(question).then(options = options=>{
+    inquirer.prompt(questions.menuq).then(options = options=>{
       switch(options.choices){
         case "View all departments":
-          //showDepartments();
+           showDepartments();
            break;
         case "View all roles":
-          //showRoles();
-          break;
+           showRoles();
+           break;
         case "View all employees":
-          //showEmployees();
-          break;
+           showEmployees();
+           break;
         case "Add a department":
           //addDepartment();
           break;
@@ -85,7 +65,33 @@ const promptoptions = () => {
         }
     });
  };
-
+ //select all departments
+ function showDepartments() {
+  db.query("SELECT * FROM department", function (err, res) {
+      if (err) throw err;
+      // Log all results of the SELECT statement
+      console.table(res);
+      promptoptions();
+  });
+}
+// SELECT all roles
+function showRoles() {
+  db.query("SELECT role.id, role.title, role.salary, department.name AS department FROM role LEFT JOIN department ON role.department_id = department.id", function (err, res) {
+      if (err) throw err;
+      // Log all results of the SELECT statement
+      console.table(res);
+      promptoptions();
+  });
+}
+ // SELECT first_name, last_name, role_id FROM employee
+function showEmployees() {
+  db.query("SELECT employees.id, employees.first_name, employees.last_name, role.title, role.salary, department.name AS department FROM employees LEFT JOIN role ON employees.role_id = role.id LEFT JOIN department ON role.department_id = department.id", function (err, res) {
+      if (err) throw err;
+      // Log all results of the SELECT statement
+      console.table(res);
+      promptoptions();
+  });
+}
 
 // Start app after DB connection
 function init(){
