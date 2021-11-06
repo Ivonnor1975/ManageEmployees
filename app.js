@@ -28,19 +28,19 @@ const promptoptions = () => {
            showEmployees();
            break;
         case "Add a department":
-          //addDepartment();
+          addDepartment();
           break;
         case "Add a role":
-          //addRole();
+          addRole();
           break;
         case "Add an employee":
-          //addEmployee();
+          addEmployee();
           break;
         case "Update an employee role":
-          //updateEmployee();
+          updateEmployee();
           break;
         case "Update an employee manager":
-          //updateManager();
+           updateManager();
           break;
         case "View employees by department":
           //employeeDepartment();
@@ -62,12 +62,12 @@ const promptoptions = () => {
          break;
         default:
           db.end(); //close database
-        }
+        }  
     });
  };
- //select all departments
+ //Display all departments
  function showDepartments() {
-  db.query("SELECT * FROM department", function (err, res) {
+  db.query("SELECT * FROM department ORDER BY name", function (err, res) {
       if (err) throw err;
       // Log all results of the SELECT statement
       console.table(res);
@@ -93,6 +93,118 @@ function showEmployees() {
   });
 }
 
+function addDepartment() {
+  inquirer.prompt(questions.addDepartmentQ).then(data = data =>{
+    db.query("INSERT INTO department SET ?", {
+      name: data.name
+    }, function (err) {
+      if (err) throw err;
+      console.log("New department was added successfully!");
+      // re-prompt the user with menu
+      promptoptions();
+    })
+  })
+}
+
+function addRole() {
+  qry = "SELECT id as value, name as name FROM department ORDER BY name"
+  db.query(qry, function (err, listdept){
+    if (err) throw err;
+    inquirer.prompt(questions.addroleq(listdept)).then(data = data =>{
+          db.query("INSERT INTO role SET ?", {
+            title: data.titleRole,
+            salary: data.salary,
+            department_id: data.department_id
+            },
+            function (err) {
+              if (err) throw err;
+              console.log("New role was added successfully!");
+              // re-prompt the user with menu
+              promptoptions();
+          })   
+    })
+  })
+}    
+function addEmployee(){
+  let qrymanager = "SELECT id as value, CONCAT(first_name, ' ', last_name) as name FROM employees"
+  db.query(qrymanager, function (err, employees){
+        if (err) throw err;
+        let qryrole = "SELECT role.id as value, title as name FROM role";
+        db.query(qryrole, function (err, roles){
+          if (err) throw err;
+          //insert on database
+          inquirer.prompt(questions.addEmployeeq(roles,employees)).then(data = data =>{
+              db.query("INSERT INTO employees SET ?", {
+                  first_name: data.first_name,
+                  last_name: data.last_name,
+                  role_id: data.role_id,
+                  manager_id: data.manager_id
+                  },
+              function (err) {
+                if (err) throw err;
+                console.log("New role was added successfully!");
+                // re-prompt the user with menu
+                promptoptions();
+            })    
+          })
+        })
+      })      
+} 
+
+
+
+//update employee with a new role
+function updateEmployee(){
+  let qrymanager = "SELECT id as value, CONCAT(first_name, ' ', last_name) as name FROM employees"
+  db.query(qrymanager, function (err, employees){
+    if (err) throw err;
+    let qryrole = "SELECT role.id as value, title as name FROM role";
+    db.query(qryrole, function (err, roles){
+        if (err) throw err;                            
+        inquirer.prompt(questions.selectEmployeeq(roles, employees)).then(data = data =>{
+          console.log(data)
+          db.query("UPDATE employees SET ? WHERE ?",
+                  [{
+                      role_id: data.role_id
+                  },
+                  {
+                      id: data.employee_id
+                  },
+              ],function (err, res) {
+                  if (err) throw err;
+                  console.log("The New role was update successfully!");
+                  // re-prompt the user with menu
+                  promptoptions();
+              })
+        })    
+    })
+  })
+}
+
+function updateManager(){
+    let qrymanager = "SELECT id as value, CONCAT(first_name, ' ', last_name) as name FROM employees"
+    db.query(qrymanager, function (err, employees){
+        if (err) throw err;
+        let managers = employees;
+        inquirer.prompt(questions.selectManagerq(employees, managers)).then(data = data =>{
+          console.log(data)
+          db.query("UPDATE employees SET ? WHERE ?",
+                  [{
+                      manager_id: data.manager_id
+                  },
+                  {
+                      id: data.employee_id
+                  },
+              ],function (err, res) {
+                  if (err) throw err;
+                  console.log("The New Manager was update successfully!");
+                  // re-prompt the user with menu
+                  promptoptions();
+              })
+        })           
+    })
+}
+
 // Start app after DB connection
 function init(){
   db.connect(err => {
@@ -101,6 +213,7 @@ function init(){
   promptoptions();
 }
 
+//Launch app
 init();
 
 

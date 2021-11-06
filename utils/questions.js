@@ -18,6 +18,101 @@ module.exports = {
                 'Delete an employee',
                 'View department budgets',
                 'No Action']
+    },
+    addDepartmentQ: {
+      type: "input",
+      message: "What is the name of your department?",
+      name: "name",
+      validate: nameInput => {
+        if (nameInput) {
+          return true;
+        } else {
+          console.log('Please enter Department name!');
+          return false;
+        }
+      }
+    },
+    addroleq: (department) => [
+      {
+        type: "input",
+        message: "What is the title of your new role?",
+        name: "titleRole",
+        validate: titleInput => {
+          if (titleInput) {
+            return true;
+          } else {
+            console.log('Please enter Title name!');
+            return false;
+          }
+        }
+      },
+      {
+        type: "input",
+        message: "What is the salary for this role?",
+        name: "salary",
+        validate: salaryInput => {
+          if (salaryInput > 0) {
+            return true;
+          } else {
+            console.log('Please enter salary!');
+            return false;
+          }
+        }
+      },
+      {
+        type: "list",
+        message: "Select a Department: ",
+        name: "department_id",
+        choices: department
+      }],
+      addEmployeeq: (roles, employees) => [{
+        type: "input",
+        message: "What is your employee's first name?",
+        name: "first_name",
+    },
+    {
+        type: "input",
+        message: "What is your employee's last name?",
+        name: "last_name",
+    },
+    {
+        type: "list",
+        message: "What is your employee's role?",
+        name: "role_id",
+        choices: roles
+    },
+    {
+        type: "list",
+        message: "Who is your employee's manager?",
+        name: "manager_id",
+        choices: employees
     }
-};
+  ],
+  selectEmployeeq: (roles,employees) => [{ 
+      type: "list",
+      message: "Choose the employee you whish to update the role?",
+      name: "employee_id",
+      choices: employees
+    },
+    {
+      type: "list",
+      message: "What is your employee's new role?",
+      name: "role_id",
+      choices: roles
+    }
+    ],
+    selectManagerq: (employees,managers) => [{ 
+      type: "list",
+      message: "Choose the employee you whish to update the role?",
+      name: "employee_id",
+      choices: employees
+    },
+    {
+      type: "list",
+      message: "What is your employee's new Manager?",
+      name: "manager_id",
+      choices: managers
+    }
+    ] 
+  };
   
