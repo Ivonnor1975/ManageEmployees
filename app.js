@@ -82,8 +82,9 @@ function showRoles() {
 }
  // SELECT first_name, last_name, role_id FROM employee
 function showEmployees() {
-  db.query("SELECT employees.id, employees.first_name, employees.last_name, role.title, role.salary, department.name AS department FROM employees LEFT JOIN role ON employees.role_id = role.id LEFT JOIN department ON role.department_id = department.id", function (err, res) {
-      if (err) throw err;
+  db.query("SELECT employees.id, employees.first_name, employees.last_name, role.title, role.salary, department.name AS department, CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employees LEFT JOIN role ON employees.role_id = role.id LEFT JOIN department ON role.department_id = department.id left join employees e on employees.manager_id = e.id", function (err, res) {
+       
+    if (err) throw err;
       // Log all results of the SELECT statement
       console.table(res);
       promptoptions();
