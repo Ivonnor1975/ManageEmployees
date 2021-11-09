@@ -42,22 +42,19 @@ const promptoptions = () => {
         case "Update an employee manager":
            updateManager();
           break;
-        case "View employees by department":
-          //employeeDepartment();
-          break;
         case "Delete a department":
-          //deleteDepartment();
+           deleteDepartment();
           break;
         case "Delete a role":
-          //deleteRole();
+          deleteRole();
           break;
         case "Delete an employee":
-          //deleteEmployee();
+          deleteEmployee();
           break;
         case "View department budgets":
-          //viewBudget();        
+          viewBudget();        
           break;
-        case "No Action": 
+        case "Quit": 
          db.end(); //close database
          break;
         default:
@@ -92,7 +89,7 @@ function showEmployees() {
       promptoptions();
   });
 }
-
+//add one department 
 function addDepartment() {
   inquirer.prompt(questions.addDepartmentQ).then(data = data =>{
     db.query("INSERT INTO department SET ?", {
@@ -105,7 +102,7 @@ function addDepartment() {
     })
   })
 }
-
+//add one role
 function addRole() {
   qry = "SELECT id as value, name as name FROM department ORDER BY name"
   db.query(qry, function (err, listdept){
@@ -125,6 +122,7 @@ function addRole() {
     })
   })
 }    
+//add one employee
 function addEmployee(){
   let qrymanager = "SELECT id as value, CONCAT(first_name, ' ', last_name) as name FROM employees"
   db.query(qrymanager, function (err, employees){
@@ -152,7 +150,6 @@ function addEmployee(){
 } 
 
 
-
 //update employee with a new role
 function updateEmployee(){
   let qrymanager = "SELECT id as value, CONCAT(first_name, ' ', last_name) as name FROM employees"
@@ -162,7 +159,6 @@ function updateEmployee(){
     db.query(qryrole, function (err, roles){
         if (err) throw err;                            
         inquirer.prompt(questions.selectEmployeeq(roles, employees)).then(data = data =>{
-          console.log(data)
           db.query("UPDATE employees SET ? WHERE ?",
                   [{
                       role_id: data.role_id
@@ -181,14 +177,14 @@ function updateEmployee(){
   })
 }
 
+//upate employee manager
 function updateManager(){
     let qrymanager = "SELECT id as value, CONCAT(first_name, ' ', last_name) as name FROM employees"
     db.query(qrymanager, function (err, employees){
         if (err) throw err;
         let managers = employees;
         inquirer.prompt(questions.selectManagerq(employees, managers)).then(data = data =>{
-          console.log(data)
-          db.query("UPDATE employees SET ? WHERE ?",
+        db.query("UPDATE employees SET ? WHERE ?",
                   [{
                       manager_id: data.manager_id
                   },
@@ -204,6 +200,61 @@ function updateManager(){
         })           
     })
 }
+//delete one department
+function deleteDepartment(){
+  let qrydepartment = "SELECT id as value, name FROM department"
+  db.query(qrydepartment, function (err, departments) {
+    if (err) throw err;
+    inquirer.prompt(questions.selectdepartment(departments)).then(data = data =>{
+             db.query("DELETE FROM department WHERE ?",{id: data.dpt_id},function (err, res) {
+             if (err) throw err;
+                console.log("The department was delete successfully!");
+                // re-prompt the user with menu
+                promptoptions();
+          })
+     })
+  })
+}
+//delete one role
+function deleteRole(){
+  let qryrole = "SELECT role.id as value, title as name FROM role"
+  db.query(qryrole, function (err, listroles) {
+    if (err) throw err;
+    inquirer.prompt(questions.selectrole(listroles)).then(data = data =>{
+          db.query("DELETE FROM role WHERE ?",{id: data.role_id},function (err, res) {
+          if (err) throw err;
+              console.log("The Role was delete successfully!");
+                // re-prompt the user with menu
+                promptoptions();
+          })
+     })
+  })
+}
+//delete one employee
+function deleteEmployee(){
+  let qryemployees = "SELECT employees.id as value, CONCAT(first_name, ' ', last_name) as name FROM employees"
+  db.query(qryemployees, function (err, listemployees) {
+    if (err) throw err;
+    inquirer.prompt(questions.selectemployee(listemployees)).then(data = data =>{
+          db.query("DELETE FROM employees WHERE ?",{id: data.employee_id},function (err, res) {
+          if (err) throw err;
+              console.log("The Employee was delete successfully!");
+              // re-prompt the user with menu
+              promptoptions();
+          })
+     })
+  })
+}
+
+//View all Departments by Budget
+const viewBudget = () => {
+  let  qrybudget = "SELECT department_id AS id, department.name AS department, SUM(salary) AS budget FROM  role INNER JOIN department ON role.department_id = department.id GROUP BY  role.department_id";
+  db.query(qrybudget, (err, res) => {
+    if (err) throw err;
+      console.table(res);
+      promptoptions();
+  });
+};
 
 // Start app after DB connection
 function init(){

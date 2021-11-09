@@ -12,12 +12,11 @@ module.exports = {
                 'Add an employee', 
                 'Update an employee role',
                 'Update an employee manager',
-                "View employees by department",
                 'Delete a department',
                 'Delete a role',
                 'Delete an employee',
                 'View department budgets',
-                'No Action']
+                'Quit']
     },
     addDepartmentQ: {
       type: "input",
@@ -113,6 +112,27 @@ module.exports = {
       name: "manager_id",
       choices: managers
     }
-    ] 
+    ],
+    selectdepartment: (departments) =>[{
+      type: "list",
+      message: "What is the Department you like to delete?",
+      name: "dpt_id",
+      choices: departments
+    }
+    ],
+    selectrole: (listroles) =>[{
+      type: "list",
+      message: "What is the Role you like to delete?",
+      name: "role_id",
+      choices: listroles
+    }
+    ],
+    selectemployee: (listemployees) =>[{
+      type: "list",
+      message: "Choose the employee you whish to DELETE the role?",
+      name: "employee_id",
+      choices: listemployees
+    }]
+
   };
   
