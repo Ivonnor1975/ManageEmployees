@@ -20,7 +20,7 @@ module.exports = {
     },
     addDepartmentQ: {
       type: "input",
-      message: "What is the name of your department?",
+      message: "What is the department's name?",
       name: "name",
       validate: nameInput => {
         if (nameInput) {
@@ -102,7 +102,7 @@ module.exports = {
     ],
     selectManagerq: (employees,managers) => [{ 
       type: "list",
-      message: "Choose the employee you whish to update the role?",
+      message: "Choose the employee you whish to update the manager?",
       name: "employee_id",
       choices: employees
     },
@@ -129,7 +129,7 @@ module.exports = {
     ],
     selectemployee: (listemployees) =>[{
       type: "list",
-      message: "Choose the employee you whish to DELETE the role?",
+      message: "Choose the employee you whish to DELETE?",
       name: "employee_id",
       choices: listemployees
     }]
