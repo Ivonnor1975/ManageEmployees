@@ -41,6 +41,13 @@
   ![image](https://user-images.githubusercontent.com/88918693/140844917-5b39f089-1c32-4e11-8265-037a0faae687.png)
 
   In addition: The following option were added.
+  - Update an employee manager
+  - Delete a department
+  - Delete a role
+  - Delete an employee
+  - View department budgets
+  
+  
   ![image](https://user-images.githubusercontent.com/88918693/140845054-8daf524d-13cb-48d9-b72c-e292d6a6c0c3.png)
 
   
