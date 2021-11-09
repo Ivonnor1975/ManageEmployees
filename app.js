@@ -141,7 +141,7 @@ function addEmployee(){
                   },
               function (err) {
                 if (err) throw err;
-                console.log("New role was added successfully!");
+                console.log("New employee was added successfully!");
                 // re-prompt the user with menu
                 promptoptions();
             })    
@@ -149,7 +149,6 @@ function addEmployee(){
         })
       })      
 } 
-
 
 //update employee with a new role
 function updateEmployee(){
@@ -194,7 +193,7 @@ function updateManager(){
                   },
               ],function (err, res) {
                   if (err) throw err;
-                  console.log("The New Manager was update successfully!");
+                  console.log("The New employee's Manager was update successfully!");
                   // re-prompt the user with menu
                   promptoptions();
               })
