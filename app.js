@@ -83,7 +83,6 @@ function showRoles() {
  // SELECT first_name, last_name, role_id FROM employee
 function showEmployees() {
   db.query("SELECT employees.id, employees.first_name, employees.last_name, role.title, role.salary, department.name AS department, CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employees LEFT JOIN role ON employees.role_id = role.id LEFT JOIN department ON role.department_id = department.id left join employees e on employees.manager_id = e.id", function (err, res) {
-       
     if (err) throw err;
       // Log all results of the SELECT statement
       console.table(res);
@@ -132,6 +131,7 @@ function addEmployee(){
         db.query(qryrole, function (err, roles){
           if (err) throw err;
           //insert on database
+          console.log(roles);
           inquirer.prompt(questions.addEmployeeq(roles,employees)).then(data = data =>{
               db.query("INSERT INTO employees SET ?", {
                   first_name: data.first_name,
